@@ -5,11 +5,13 @@ import RatingSelect from './RatingSelect';
 import FeedbackContext from '../context/FeedbackContext';
 
 function FeedbackForm() {
-    const { addFeedback, feedbackEdit } = useContext(FeedbackContext);
+    const { addFeedback, feedbackEdit, updateFeedback } = useContext(FeedbackContext);
+
     const [rating, setRating] = useState(10);
     const [text, setText] = useState('');
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [message, setMessage] = useState('');
+
     const handleTextChange = (e) => {
         if (text === '') {
             setBtnDisabled(true);
@@ -23,6 +25,7 @@ function FeedbackForm() {
         }
         setText(e.target.value);
     }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (text.trim().length >= 10) {
@@ -30,7 +33,11 @@ function FeedbackForm() {
                 text,
                 rating,
             }
-            addFeedback(newFeedback);
+            if (feedbackEdit.edit === true) {
+                updateFeedback(feedbackEdit.item.id, newFeedback);
+            } else {
+                addFeedback(newFeedback);
+            }
             setText('');
         }
     }
